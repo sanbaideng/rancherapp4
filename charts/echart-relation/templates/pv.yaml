@@ -1,0 +1,31 @@
+{{ if .Values.volumes }}
+{{- $storageAddr := .Values.global.storageAddr -}}
+{{- $cephUser := .Values.global.cephUser -}}
+{{- $cephSecret := .Values.global.cephSecret -}}
+{{- range $index, $volume := .Values.volumes -}}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "mychart.fullname" $ }}-pv-{{ $index }}
+  labels:
+    app.kubernetes.io/name: {{ include "mychart.fullname" $ }}-pv-{{ $index }}
+    helm.sh/chart: {{ include "mychart.chart" $ }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/managed-by: {{ $.Release.Service }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: {{ $volume.size }}
+  cephfs:
+    monitors:
+      - {{ $storageAddr }}
+    path: {{ $volume.cephPath }}
+    user: {{ $cephUser }}
+    secretRef:
+      name: {{ $cephSecret }}
+      namespace: default
+    readOnly: false
+  persistentVolumeReclaimPolicy: Retain
+{{ end }}
+{{ end }}

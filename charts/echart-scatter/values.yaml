@@ -1,0 +1,20 @@
+image:
+  repository: reg.cecii.cn/pk/echart-scatter
+  tag: latest
+  port: 80
+  pullPolicy: Always
+    
+service:
+  type: ClusterIP
+
+ingress:
+  enabled: true
+  host: ${host}
+  tls: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+replicaCount: 1
+
+volumes: []

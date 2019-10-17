@@ -1,0 +1,10 @@
+apiVersion: v1
+name: echart-scatter
+version: 1.0
+appVersion: 1.0.0
+icon: http://echart-logo.os.cecii.cn/scatter.ico
+keywords: 
+  - echarts
+  - scatter
+  - 散点图
+description: 本应用是供Java开发使用的ECharts的报表公共组件的散点图组件
