@@ -1,0 +1,116 @@
+# Default values for consul.
+# This is a YAML-formatted file.
+# Declare name/value pairs to be passed into your templates.
+# name: value
+
+## Consul service ports
+HttpPort: 8500
+RpcPort: 8400
+SerflanPort: 8301
+SerflanUdpPort: 8301
+SerfwanPort: 8302
+SerfwanUdpPort: 8302
+ServerPort: 8300
+ConsulDnsPort: 8600
+
+## Specify the domain with which consul should run with
+## This will be passed as a -domain parameter
+Domain: consul
+
+## Used as selector
+Component: "consul"
+Replicas: 1
+Image: "consul"
+ImageTag: "1.0.0"
+ImagePullPolicy: "IfNotPresent"
+Resources: {}
+ # requests:
+ #   cpu: "100m"
+ #   memory: "256Mi"
+ # limits:
+ #   cpu: "500m"
+ #   memory: "512Mi"
+## Persistent volume size
+
+priorityClassName: ""
+
+Storage: "1Gi"
+
+## Needed for 0.8.0 and later IF all consul containers are spun up
+## on the same machine. Without this they all generate the same
+## host id.
+DisableHostNodeId: false
+
+## Datacenter name for consul. If not supplied, will use the consul
+## default 'dc1'
+# DatacenterName: dc1
+
+## Encrypt Gossip Traffic
+Gossip:
+  Encrypt: true
+  Create: true
+
+
+maxUnavailable: 1
+
+
+affinity: |
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 1
+      podAffinityTerm:
+        topologyKey: kubernetes.io/hostname
+        labelSelector:
+          matchExpressions:
+          - key: component
+            operator: In
+            values:
+            - "{{ .Release.Name }}-{{ .Values.Component }}"
+
+## Enable Consul Web UI
+##
+ui:
+  enabled: true
+## Create dedicated UI service
+##
+uiService:
+  enabled: true
+  type: "NodePort"
+  annotations: {}
+
+ConsulConfig: []
+#  - type: secret
+#    name: consul-defaults
+#  - type: configMap
+#    name: consul-defaults
+
+## Create an Ingress for the Web UI
+ingress:
+  enabled: true
+  annotations: {}
+  labels: {}
+  host: ${host}
+  tls: {}
+
+## Useful when ACLs are enabled
+acl:
+  enabled: false
+  masterToken: ""
+  agentToken: ""
+
+## test container details
+test:
+  image: lachlanevenson/k8s-kubectl
+  imageTag: v1.4.8-bash
+  rbac:
+    create: false
+    serviceAccountName: ""
+
+## test container details
+config:
+  redis: pvc-redis
+  pgsql: pvc-pgsql
+nodeSelector: {}
+tolerations: []
+persistence:
+  name : a
