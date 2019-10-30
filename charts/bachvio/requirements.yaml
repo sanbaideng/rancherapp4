@@ -1,0 +1,5 @@
+dependencies:
+- name: mariadb
+  condition: mariadb.enabled
+  tags:
+    - wordpress-database
