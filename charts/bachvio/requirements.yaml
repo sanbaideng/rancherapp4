@@ -1,5 +1,6 @@
 dependencies:
 - name: mariadb
+  version: 2.1.1
   condition: mariadb.enabled
   tags:
     - wordpress-database
