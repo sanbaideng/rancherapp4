@@ -8,17 +8,6 @@ istioSidecar:
 
 imagePullPolicy: IfNotPresent
 
-wordpressUsername: user
-
-wordpressEmail: user@example.com
-
-
-wordpressFirstName: FirstName
-
-
-wordpressLastName: LastName
-
-wordpressBlogName: User's Blog!
 
 
 externalDatabase:
