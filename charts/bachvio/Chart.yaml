@@ -2,7 +2,7 @@ name: bachvio
 version: 0.10.1
 appVersion: 4.9.8
 description: Web publishing platform for building blogs and websites.
-icon: https://raw.githubusercontent.com/sanbaideng/rancherapp4/master/icons/vio.png
+icon: https://markdowna.oss-cn-shenzhen.aliyuncs.com/icon/vio.png
 keywords:
 - wordpress
 - cms

@@ -41,10 +41,10 @@ spec:
         - name: DB_PORT
           value: "3306"
         - name: INGRESS_URL
-          value: .Values.ingress.host
+          value: {{ .Values.ingress.host }}
         ports:
         - name: http
-          containerPort: 8080
+          containerPort: 8071
         - name: https
           containerPort: 443
         livenessProbe:
