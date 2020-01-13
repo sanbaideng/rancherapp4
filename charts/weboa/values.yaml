@@ -1,0 +1,84 @@
+apiVersion: extensions/v1beta1
+image: reg.cecii.cn/pk/weboa:v2
+
+replicaCount: 1
+
+istioSidecar:
+  enabled: false
+
+imagePullPolicy: IfNotPresent
+
+
+
+externalDatabase:
+  azure:
+    ## Service name  (there are 3 types)
+    serviceName: azure-mysql-5-7
+    ## The Azure region in which to deploy Azure Database for MySQL
+    location: eastus
+    ## The plan to request for Azure Database for MySQL
+    servicePlan: general-purpose
+    ssl: disabled
+
+##
+## MariaDB chart configuration
+##
+mariadb:
+  enabled: true
+
+  mariadbDatabase: bachvio
+
+  ## Create a database user
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+  ##
+  mariadbUser: bn_wordpress
+
+  persistence:
+    enabled: false
+    accessMode: ReadWriteOnce
+    size: 8Gi
+
+## Kubernetes configuration
+## For minikube, set this to NodePort, elsewhere use LoadBalancer
+##
+serviceType: LoadBalancer
+
+## Allow health checks to be pointed at the https port
+healthcheckHttps: false
+
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+livenessProbe:
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+readinessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+ingress:
+  ## Set to true to enable ingress record generation
+  enabled: true
+  host: ${host}
+  tls: false
+  tlsSecret: wordpress.local-tls
+  annotations:
+  secrets:
+
+persistence:
+  enabled: false
+  accessMode: ReadWriteOnce
+  size: 10Gi
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  requests:
+    memory: 512Mi
+    cpu: 300m
